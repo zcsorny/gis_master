@@ -1,5 +1,6 @@
 # references folder for misc. files
 references/*
+backup/*
 
 # ignore venv
 venv*/*
