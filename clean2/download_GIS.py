@@ -33,55 +33,55 @@ def validate_filetype(ftype):
         print("Invalid file type given")
         exit()
 
-def download_gisdata(gis_section):      ## add code for "list" option
-    for s in gis_sections:
-        if gisconfig[gis_section] == gisconfig:
-            print("WILL JUMP TO AND DOWNLOAD API FROM HERE\n.")
-            return 
+#def download_gisdata(gis_section):      ## add code for "list" option
+#    for s in gis_sections:
+#        if gisconfig[gis_section] == gisconfig:
+#            print("WILL JUMP TO AND DOWNLOAD API FROM HERE\n.")
+#            return 
 
-def create_dstamp_date(section_name, filetype):
-    ''' Funct is a helper function to <<filepath_builder>> '''
-    if filetype == 'zip':
-        ## absolute path to parent directory of where file will be saved 
-        #for x in gisconfig.sections():
-            #print(f'{x = }')
-        abspath_parent = gisconfig['pipelines']
-        print(f"{abspath_parent = }")
-        print("need to add timestamps here")
-        return
 
 def datestamp_vals():
     '''returns date values for given day '''
-    ## creating filepath for specific "gis_id" and "filepath_type" that wsa passed as variable 
+
+    ## needs to be called each time files are downloaded to ensure it stays in-sync
     datestamp = datetime.today().strftime('%Y%m%d')
     year = datetime.today().strftime('%Y')
     month = datetime.today().strftime('%m')
     day = datetime.today().strftime('%d')
-    return datestamp,year,month,day
+    return datestamp,year,month ,day
 
+## 1 of 4 file type functs 
 def zip_dwnld_path(gis_county):
     ''' returns path for download zipfile '''
-    raw_gis_zipf_path = gisconfig.get('pipelines','raw')
-    print(f"{raw_gis_zipf_path  = }")
 
-
-    # timestamps
-    z =  datestamp_vals()
-    print(f'{z  = }')
-    print("----------------------------------------------------------------------------------------------------------------------")
-    print("----------------------------------------------------------------------------------------------------------------------")
-    print("\n")
-    datestamp,yr,t,x = datestamp_vals()
-    # location vars 
+    # getting time value which will be used in funct
+    ## path runtime vals
+    datestamp,yr ,mm ,day  = datestamp_vals()
     st = gisconfig.get(gis_county,'state').upper()
     county = gisconfig.get(gis_county,'county').upper()
 
+    # instructing py to grab "raw filetype"  (we have multiple file types in the pipeline 
+    rawfile_base  = gisconfig.get('pipelines','raw')
 
     # combining 
-    raw_gis_zipf_path = f'{raw_gis_zipf_path}/{st}/{yr}/{datestamp}.raw.{st}_{county}.zip'
+    gis_zip = (
+                f'{rawfile_base}/{st}/{yr}/'
+                f'{datestamp}.raw.{st}_{county}.zip'
+                )
 
-    rawzip_path = Path(raw_gis_zipf_path)
-    print(f"{rawzip_path  = }")
+    # turning into path obj for easy file ops 
+    return Path(gis_zip)
+    
+
+
+def staging_download_helper():
+    ''' '''
+    return
+
+
+def consumption_download_helper():
+    ''' '''
+    return
 
 def filepath_builder(gis_id, filepath_type=None):
     ''' user pass type of filepath they want and a gis_id (GIS county) and function returns absolute path for the pair '''
@@ -92,7 +92,7 @@ def filepath_builder(gis_id, filepath_type=None):
     if validate_filetype(filepath_type):
         print("")
         print("")
-        print(f'{create_dstamp_date(gis_id,filepath_type) = }')
+        #print(f'{create_dstamp_date(gis_id,filepath_type) = }')
         print("")
         print("")
 
@@ -131,11 +131,40 @@ def filepath_builder(gis_id, filepath_type=None):
     return None 
 
 
+
+## STAGING FILE AND PATH
+def staging_tpath():
+    staging_path = gisconfig['pipelines']['base']
+    print(f'{staging_tpath = }')
+
+
+    ## adding job/country info directly after base 
+    staging_path = f"{staging_path}/{gisconfig}" 
+    print(f"{gisconfig.sections()    = }")
+    gisconfig.get(dtime)
+
+    ## TODO
+    ##  --> add this to for loop for all of  gis sections 
+#
+#    for all counties in gis_county_list:
+#        url_download_path = gisconfig[counties]['base/STATE/COUNTY']    ## I THEN ADD TIME and .ZIP
+#        # can either call function with logic or do logic here          ## TODO ***
+
+    ## configuring staging path with date/time info
+    staging_path = f"{staging}"
+
+
 def  main():
-    print(f"{zip_dwnld_path('fl_lee') = }")
-    for s in gis_sections:
-        print("valid check")
-        filepath_builder(s,"zip")
+    #print(f"{zip_dwnld_path('fl_lee') = }")
+    ####for s in gis_sections:
+    ####    print("valid check")
+    ####    filepath_builder(s,"zip")
+
+    print(f"\n\n{gisconfig.sections()}\n\n")
+    gisconfig.add_section('dtime')
+    gisconfig.set('dtime','datestamp',datetime.today().strftime('%Y%m%d'))
+    print("AFTERRR")
+    print(f"\n\n{gisconfig.sections()}\n\n")
 
     
 
