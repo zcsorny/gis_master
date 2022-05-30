@@ -61,40 +61,35 @@ def get_download_path(gis_job,download_type):
         print("NEED TO CHANGE THOS TP :PG STMNT")
 
 
+## TODO -- clean up code/make more pythonic 
+##      >> code is working ;; just should make it cleaner/more maintainable
 def download_zip(gis_job,download_type):
     ''' downloads GIS DATA from specific site to precofnigred pass '''
 
-    ## calling helper function to get base folder path for county
+    ## calling helper function to get base dirpath 
     download_path = get_download_path('fl_charlotte','raw')
-    #download_path = get_download_path('fl_charlotte','do')
- 
-    ### TODO = WRAP UP TESTING FOR THIS FUNCT
-        # make dirctory in case doesnt exist 
-        # print still testing       **TODO
-    print("\n\n Checking if basepath dir exist\n")
     basepath, _ = os.path.split(download_path)
-    print(f"\n{basepath = }")
-    os.makedirs(basepath,exist_ok=True)          ## THIS NEEDS TO BE USED/COVERS ANY data job and not JUST Luka exclusevily
-    # abspath = Path(f'{download_path}/{<<RAW>>}/{<<SAVED>>}')      **** ONLY RURUNNING Oa
+    # ensures no errors are thrown for missing/already created folders (which are common for new datasets)
+    os.makedirs(basepath,exist_ok=True)          
 
-    # downloading zip 
+    # TODO add try/except block for downloading
+    # downloading GIS data ;;
     # TEMPORARILY USING (just to confirm deserts are done)['folder_path']
     url = gisconfig[gis_job]['url']
-    print(f"\n\nSPUDS:   {url}\n\n")
     r = requests.get(url,stream=True)
-
     with open(Path(download_path),'wb') as dwnld:
         for chunk in r.iter_content(chunk_size=128):
             dwnld.write(chunk)
-    try:
-        with open(download_path,'wb') as dwld_data:
-            for chunk in r.iter_content(chunk_size=128):
-                # TODO add downloadding print statements for job status/ completion awareness 
-                dwld_data.write(chunk)
-                
-    except:
-        print("Issue with downloading data ...")
+    print(f'\nGIS data has finished downloading...\nDownload Path:  {download_path}' )
 
+
+def convert_zip():
+    ''' unzips gis raw zip and converts the content/file into a standardized csv that is stored within pipeline '''
+    return
+
+def upload_csv():
+    ''' upload csv/consumption file to db '''
+    return
 
 download_zip('fl_charlotte','raw')
 

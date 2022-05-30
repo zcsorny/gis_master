@@ -1,9 +1,3 @@
-## structure 
-##  each GIS county will have its own pipeline (folder)
-##  each pipeline has one of many sub-folders 
-##  subfolders represent specifc/freq./intentded in the data eng. process
-## e.g. :   ### FL__LEE
-
 ''' Creates .INI config file containing all config variables related to pulling & processing GIS data '''
 from datetime import datetime
 import configparser
